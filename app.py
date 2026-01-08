@@ -206,3 +206,4 @@ with col2:
 
 else:
     st.info("Please upload the Excel file to view the dashboard.")
+
