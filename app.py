@@ -147,24 +147,24 @@ if uploaded_file:
 
     st.markdown("---")
 
-    # -----------------------------
-    # Charts
-    # -----------------------------
-    st.subheader("Project Insights")
+# -----------------------------
+# Charts
+# -----------------------------
+st.subheader("Project Insights")
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
-        st.write("Projects by Status")
-        plt.figure()
-        filtered_df[status_col].value_counts().plot(kind="bar")
-        st.pyplot(plt)
+with col1:
+    st.write("Projects by Status")
+    plt.figure()
+    filtered_df[status_col].value_counts().plot(kind="bar")
+    st.pyplot(plt)
 
-    with col2:
-        st.write("Projects by Integration")
-        plt.figure()
-        filtered_df["Integration"].value_counts().plot(kind="bar")
-        st.pyplot(plt)
+with col2:
+    st.write("Projects by Integration")
+    plt.figure()
+    filtered_df["Integration"].value_counts().plot(kind="bar")
+    st.pyplot(plt)
 
     st.markdown("---")
 
