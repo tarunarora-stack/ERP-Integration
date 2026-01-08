@@ -176,13 +176,56 @@ if uploaded_file:
 
     st.markdown("---")
 
-    # Chart 3: Projects by SPOC
-    st.markdown("### Projects by SPOC (Webtel)")
-    fig, ax = plt.subplots(figsize=(8, 4))
-    filtered_df["SPOC from Webtel"].value_counts().sort_values().plot(kind="barh", ax=ax)
-    ax.set_xlabel("Number of Projects")
-    ax.set_ylabel("SPOC Name")
-    st.pyplot(fig)
+# -----------------------------
+# Excel-style SPOC Chart (TOTAL)
+# -----------------------------
+st.subheader("TOTAL – Projects by SPOC (Webtel)")
+
+spoc_counts = (
+    filtered_df["SPOC from Webtel"]
+    .value_counts()
+    .sort_values(ascending=False)
+)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+# Dark background (Excel-like)
+fig.patch.set_facecolor("#3b3b3b")
+ax.set_facecolor("#3b3b3b")
+
+bars = ax.bar(
+    spoc_counts.index,
+    spoc_counts.values
+)
+
+# Axis styling
+ax.set_title("TOTAL", fontsize=18, color="white", pad=20)
+ax.set_xlabel("")
+ax.set_ylabel("Count of Projects", color="white")
+
+ax.tick_params(axis="x", colors="white", rotation=45)
+ax.tick_params(axis="y", colors="white")
+
+# Remove borders
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+# Add value labels on bars (VERY IMPORTANT)
+for bar in bars:
+    height = bar.get_height()
+    ax.text(
+        bar.get_x() + bar.get_width() / 2,
+        height,
+        f"{int(height)}",
+        ha="center",
+        va="bottom",
+        color="white",
+        fontsize=10,
+        fontweight="bold"
+    )
+
+st.pyplot(fig)
+
 
     st.markdown("---")
 
