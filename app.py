@@ -23,6 +23,9 @@ uploaded_file = st.file_uploader(
     type=["xlsx"]
 )
 
+# =========================================================
+# MAIN APP LOGIC
+# =========================================================
 if uploaded_file:
 
     # -----------------------------
@@ -85,8 +88,6 @@ if uploaded_file:
         ~filtered_df[status_col].isin(["Completed", "On-Hold", "Scrap"])
     ]
 
-    avg_days = round(filtered_df["Days"].mean(), 2) if "Days" in filtered_df else 0
-
     # -----------------------------
     # KPI Cards
     # -----------------------------
@@ -147,29 +148,46 @@ if uploaded_file:
 
     st.markdown("---")
 
-# -----------------------------
-# Charts
-# -----------------------------
-st.subheader("Project Insights")
+    # -----------------------------
+    # Project Insights (Enhanced Charts)
+    # -----------------------------
+    st.subheader("Project Insights")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    st.write("Projects by Status")
-    plt.figure()
-    filtered_df[status_col].value_counts().plot(kind="bar")
-    st.pyplot(plt)
+    # Chart 1: Projects by Status
+    with col1:
+        st.markdown("### Projects by Status")
+        fig, ax = plt.subplots()
+        filtered_df[status_col].value_counts().plot(kind="bar", ax=ax)
+        ax.set_xlabel("Status")
+        ax.set_ylabel("Number of Projects")
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
 
-with col2:
-    st.write("Projects by Integration")
-    plt.figure()
-    filtered_df["Integration"].value_counts().plot(kind="bar")
-    st.pyplot(plt)
+    # Chart 2: Projects by Integration
+    with col2:
+        st.markdown("### Projects by Integration")
+        fig, ax = plt.subplots()
+        filtered_df["Integration"].value_counts().sort_values().plot(kind="barh", ax=ax)
+        ax.set_xlabel("Number of Projects")
+        ax.set_ylabel("Integration Type")
+        st.pyplot(fig)
+
+    st.markdown("---")
+
+    # Chart 3: Projects by SPOC
+    st.markdown("### Projects by SPOC (Webtel)")
+    fig, ax = plt.subplots(figsize=(8, 4))
+    filtered_df["SPOC from Webtel"].value_counts().sort_values().plot(kind="barh", ax=ax)
+    ax.set_xlabel("Number of Projects")
+    ax.set_ylabel("SPOC Name")
+    st.pyplot(fig)
 
     st.markdown("---")
 
     # -----------------------------
-    # Project Detail Table
+    # Project Details Table
     # -----------------------------
     st.subheader("Project Details")
 
@@ -204,6 +222,8 @@ with col2:
         "text/csv"
     )
 
+# =========================================================
+# NO FILE UPLOADED
+# =========================================================
 else:
     st.info("Please upload the Excel file to view the dashboard.")
-
